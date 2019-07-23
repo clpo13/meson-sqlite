@@ -5,8 +5,12 @@ project('meson-sqlite', 'cpp',
                      'cpp_std=c++14'])
 
 # Set up dependencies
-sqlite_proj = subproject('sqlite')
-sqlite_dep = sqlite_proj.get_variable('sqlite_dep')
+sqlite_dep = dependency('sqlite3', required : false)
+
+if not sqlite_dep.found()
+  sqlite_proj = subproject('sqlite')
+  sqlite_dep = sqlite_proj.get_variable('sqlite_dep')
+endif
 
 # Compile the program
 exe = executable('sqlite-test', 'sqlite-test.cpp',
